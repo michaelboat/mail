@@ -50,7 +50,8 @@ function view_email(id){
       </br>
       <li class = "list-group-item">${email.body}</li> 
       </ul>`;
-    
+
+      // updating read status when user views email
       if(!email.read){
         fetch(`/email/${email.id}`,{
           method: 'PUT',
@@ -60,7 +61,25 @@ function view_email(id){
         }
         )
       }
+
+      // Archiving
+      const element = document.createElement('button')
+      element.innerHTML = email.archived ? 'Unarchive': 'Archive';
+      element.className = email.archived ? 'btn btn-success': 'btn btn-danger';
+      element.addEventListener('click', function() {
+        fetch(`/email/${email.id}`,{
+          method: 'PUT',
+          body: JSON.stringify({
+            archived: !archived
+          })
+        })
+        .then(() => {load_mailbox('archived')})
+      })
   });
+  document.querySelector('email-content-view').append(element);
+
+  // Reply
+
 }
 
 function load_mailbox(mailbox) {
