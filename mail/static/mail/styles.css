@@ -4,8 +4,10 @@ textarea {
 
 .read{
     background-color: lightgray;
+    border-color: black;
 }
 
 .unread{
     background-color: white;
+    border-color: black;
 }
