@@ -50,7 +50,16 @@ function view_email(id){
       </br>
       <li class = "list-group-item">${email.body}</li> 
       </ul>`;
-
+    
+      if(!email.read){
+        fetch(`/email/${email.id}`,{
+          method: 'PUT',
+          body: JSON.stringify({
+            read: true
+          })
+        }
+        )
+      }
   });
 }
 
