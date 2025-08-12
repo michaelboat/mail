@@ -50,7 +50,7 @@ function view_email(id){
       </br>
       <li class = "list-group-item">${email.body}</li> 
       </ul>`;
-
+  
       // updating read status when user views email
       if(!email.read){
         fetch(`/email/${email.id}`,{
@@ -63,7 +63,7 @@ function view_email(id){
       }
 
       // Archiving
-      const element = document.createElement('button')
+      const element = document.createElement('button');
       element.innerHTML = email.archived ? 'Unarchive': 'Archive';
       element.className = email.archived ? 'btn btn-success': 'btn btn-danger';
       element.addEventListener('click', function() {
@@ -74,12 +74,26 @@ function view_email(id){
           })
         })
         .then(() => {load_mailbox('archived')})
-      })
-  });
-  document.querySelector('email-content-view').append(element);
+      });
+      document.querySelector('#email-content-view').append(element);
 
-  // Reply
+      // Reply
+      const reply_element = document.createElement('button')
+      reply_element.innerHTML = 'Reply';
+      reply_element.className = 'btn btn-info';
+      reply_element.addEventListener('click', function(){
+        compose_email();
+        document.querySelector('#compose-recipients').value = email.sender;
+        let subject = email.subject;
+        if (subject.split(' ', 1)[0] != 'Re:'){
+          subject = "Re: " + email.subject;
+        }
+        document.querySelector('#compose-subject').value = subject;
+        document.querySelector('#compose-body').value = `On ${email.timestamp} ${email.sender} wrote: ${email.body}`;
+      });
+      document.querySelector('#email-content-view').append(reply_element);
 
+    })
 }
 
 function load_mailbox(mailbox) {
